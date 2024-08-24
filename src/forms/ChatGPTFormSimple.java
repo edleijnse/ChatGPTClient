@@ -1,9 +1,10 @@
 package forms;
-
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class ChatGPTFormSimple extends JFrame{
+public class ChatGPTFormSimple extends JFrame {
     private JPanel contentPaneSimple;
     private JLabel labelQuestion;
     private JTextField textQuestion;
@@ -42,6 +43,32 @@ public class ChatGPTFormSimple extends JFrame{
         setContentPane(contentPaneSimple);
         pack();
         setLocationRelativeTo(null); // Center the window
+
+        // Add action listeners
+        buttonAsk.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fillAnswer();
+            }
+        });
+
+        buttonClean.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cleanFields();
+            }
+        });
+    }
+
+    private void fillAnswer() {
+        // Simply reflect the question in the answer field for demonstration
+        textAnswer.setText(textQuestion.getText());
+    }
+
+    private void cleanFields() {
+        // Clear the text fields
+        textQuestion.setText("");
+        textAnswer.setText("");
     }
 
     public static void main(String[] args) {
