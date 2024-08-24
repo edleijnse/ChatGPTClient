@@ -8,7 +8,7 @@ public class ChatGPTFormSimple extends JFrame {
     private JPanel contentPaneSimple;
     private JLabel labelQuestion;
     private JTextField textQuestion;
-    private JTextField textAnswer;
+    private JTextArea textAnswer;
     private JButton buttonAsk;
     private JButton buttonClean;
 
@@ -20,22 +20,51 @@ public class ChatGPTFormSimple extends JFrame {
     private void createUIComponents() {
         // Initialize panel and components
         contentPaneSimple = new JPanel();
-        contentPaneSimple.setLayout(new GridLayout(0, 2)); // Example layout manager
+        contentPaneSimple.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(5, 5, 5, 5); // Add some padding
 
         // Initialize other components
         labelQuestion = new JLabel("Ask a question:");
         textQuestion = new JTextField(20);
-        textAnswer = new JTextField(20);
+        textAnswer = new JTextArea(5, 20);
+        textAnswer.setLineWrap(true);
+        textAnswer.setWrapStyleWord(true);
+        JScrollPane scrollPane = new JScrollPane(textAnswer);
+
         buttonAsk = new JButton("Ask");
         buttonClean = new JButton("Clean");
 
+        // Set preferred sizes for the buttons
+        Dimension buttonSize = new Dimension(80, 50); // Width, Height
+        buttonAsk.setPreferredSize(buttonSize);
+        buttonClean.setPreferredSize(buttonSize);
+
         // Add components to contentPane
-        contentPaneSimple.add(labelQuestion);
-        contentPaneSimple.add(textQuestion);
-        contentPaneSimple.add(new JLabel("Answer:")); // Optional: Add label for answer
-        contentPaneSimple.add(textAnswer);
-        contentPaneSimple.add(buttonAsk);
-        contentPaneSimple.add(buttonClean);
+        c.gridx = 0;
+        c.gridy = 0;
+        contentPaneSimple.add(labelQuestion, c);
+
+        c.gridx = 1;
+        c.gridy = 0;
+        contentPaneSimple.add(textQuestion, c);
+
+        c.gridx = 0;
+        c.gridy = 1;
+        contentPaneSimple.add(new JLabel("Answer:"), c); // Optional: Add label for answer
+
+        c.gridx = 1;
+        c.gridy = 1;
+        contentPaneSimple.add(scrollPane, c);
+
+        c.gridx = 0;
+        c.gridy = 2;
+        c.gridwidth = 2;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        contentPaneSimple.add(buttonAsk, c);
+
+        c.gridy = 3;
+        contentPaneSimple.add(buttonClean, c);
 
         // Set up the frame
         setTitle("ChatGPT client");
