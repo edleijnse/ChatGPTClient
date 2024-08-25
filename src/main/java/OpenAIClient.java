@@ -67,7 +67,7 @@ public class OpenAIClient {
         }
     }
 
-    private static void getOpenAIResponseGpt4Mini(String inputText, CloseableHttpClient client, String apiKey) throws IOException {
+    private static String  getOpenAIResponseGpt4Mini(String inputText, CloseableHttpClient client, String apiKey) throws IOException {
         String user = "language teacher English, Spanish and German";
 
         ObjectMapper mapper = new ObjectMapper();
@@ -96,10 +96,12 @@ public class OpenAIClient {
         try (CloseableHttpResponse response = client.execute(request)) {
             JsonNode responseData = mapper.readTree(response.getEntity().getContent());
             String completion = responseData.get("choices").get(0).get("message").get("content").asText();
-            System.out.println("Answer: " + completion);
+            return completion;
+            // System.out.println("Answer: " + completion);
         } catch (Exception e) {
             System.err.println("Error occurred: " + e.getMessage());
         }
+        return "";
     }
 
     public static void main(String[] args) {
@@ -108,11 +110,11 @@ public class OpenAIClient {
             CloseableHttpClient client = initOpenAIClient();
 
             // Example usage
-            String inputText = "Best things to see in Paris";
+            String inputText = "Best things to see in Paris, in categories";
             String inputText2 = "Best things to see in Paris";
-            getOpenAIResponseGpt4(inputText, client, apiKey);
-
-            getOpenAIResponseGpt4Mini(inputText2, client, apiKey);
+            // getOpenAIResponseGpt4(inputText, client, apiKey);
+            String response = getOpenAIResponseGpt4Mini(inputText, client, apiKey);
+            System.out.println("Answer: " + response);
 
         } catch (IOException e) {
             e.printStackTrace();
