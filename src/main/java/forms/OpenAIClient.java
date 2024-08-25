@@ -1,3 +1,5 @@
+package forms;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -13,9 +15,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class OpenAIClient {
+public  class OpenAIClient {
 
-    private static String readApiKey() throws IOException {
+    public String readApiKey() throws IOException {
         // Get the current working directory
         String currentDir = System.getProperty("user.dir");
         // Get the directory one level above the current working directory
@@ -26,12 +28,12 @@ public class OpenAIClient {
         return new String(keyBytes).trim();
     }
 
-    private static CloseableHttpClient initOpenAIClient() throws IOException {
+    public CloseableHttpClient initOpenAIClient() throws IOException {
         return HttpClients.createDefault();
     }
 
 
-    private static void getOpenAIResponseGpt4(String inputText, CloseableHttpClient client, String apiKey) throws IOException {
+    public void getOpenAIResponseGpt4(String inputText, CloseableHttpClient client, String apiKey) throws IOException {
         String user = "language teacher English, Spanish and German";
 
         ObjectMapper mapper = new ObjectMapper();
@@ -67,7 +69,7 @@ public class OpenAIClient {
         }
     }
 
-    private static String  getOpenAIResponseGpt4Mini(String inputText, CloseableHttpClient client, String apiKey) throws IOException {
+    public  String getOpenAIResponseGpt4Mini(String inputText, CloseableHttpClient client, String apiKey) throws IOException {
         String user = "language teacher English, Spanish and German";
 
         ObjectMapper mapper = new ObjectMapper();
@@ -104,7 +106,7 @@ public class OpenAIClient {
         return "";
     }
 
-    public static void main(String[] args) {
+    public void main(String[] args) {
         try {
             String apiKey = readApiKey();
             CloseableHttpClient client = initOpenAIClient();

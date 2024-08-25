@@ -1,8 +1,23 @@
 package forms;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 
 public class ChatGPTFormSimple extends JFrame {
     private JPanel contentPaneSimple;
@@ -77,7 +92,11 @@ public class ChatGPTFormSimple extends JFrame {
         buttonAsk.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                fillAnswer();
+                try {
+                    fillAnswer();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
@@ -89,9 +108,16 @@ public class ChatGPTFormSimple extends JFrame {
         });
     }
 
-    private void fillAnswer() {
+    private void fillAnswer() throws IOException {
         // Simply reflect the question in the answer field for demonstration
-        textAnswer.setText(textQuestion.getText());
+        OpenAIClient aiClient = new OpenAIClient();
+        String apiKey = aiClient.readApiKey();
+        CloseableHttpClient client = aiClient.initOpenAIClient();
+
+        String inputText = textQuestion.getText();
+        String myAnswer = aiClient.getOpenAIResponseGpt4Mini(inputText, client, apiKey);
+
+        textAnswer.setText(myAnswer);
     }
 
     private void cleanFields() {
@@ -106,4 +132,5 @@ public class ChatGPTFormSimple extends JFrame {
             form.setVisible(true);
         });
     }
+
 }
