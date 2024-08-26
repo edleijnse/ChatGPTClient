@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-
 public class ChatGPTFormSimple extends JFrame {
     private JPanel contentPaneSimple;
     private JLabel labelQuestion;
@@ -28,21 +27,18 @@ public class ChatGPTFormSimple extends JFrame {
     private JButton buttonClean;
 
     public ChatGPTFormSimple() {
-        // Call method to create UI components
         createUIComponents();
     }
 
     private void createUIComponents() {
-        // Initialize panel and components
         contentPaneSimple = new JPanel();
         contentPaneSimple.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-        c.insets = new Insets(5, 5, 5, 5); // Add some padding
+        c.insets = new Insets(10, 10, 10, 10); // Increased insets for padding
 
-        // Initialize other components
         labelQuestion = new JLabel("Ask a question:");
-        textQuestion = new JTextField(20);
-        textAnswer = new JTextArea(5, 20);
+        textQuestion = new JTextField(40); // Doubled width
+        textAnswer = new JTextArea(10, 40); // Doubled size
         textAnswer.setLineWrap(true);
         textAnswer.setWrapStyleWord(true);
         JScrollPane scrollPane = new JScrollPane(textAnswer);
@@ -50,8 +46,8 @@ public class ChatGPTFormSimple extends JFrame {
         buttonAsk = new JButton("Ask");
         buttonClean = new JButton("Clean");
 
-        // Set preferred sizes for the buttons
-        Dimension buttonSize = new Dimension(80, 50); // Width, Height
+        // Set preferred sizes for the buttons (4 times smaller)
+        Dimension buttonSize = new Dimension(80, 52); // (4 times smaller)
         buttonAsk.setPreferredSize(buttonSize);
         buttonClean.setPreferredSize(buttonSize);
 
@@ -72,23 +68,25 @@ public class ChatGPTFormSimple extends JFrame {
         c.gridy = 1;
         contentPaneSimple.add(scrollPane, c);
 
+        // Add buttons on the same line
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.add(buttonAsk);
+        buttonPanel.add(buttonClean);
+
         c.gridx = 0;
         c.gridy = 2;
         c.gridwidth = 2;
         c.fill = GridBagConstraints.HORIZONTAL;
-        contentPaneSimple.add(buttonAsk, c);
-
-        c.gridy = 3;
-        contentPaneSimple.add(buttonClean, c);
+        contentPaneSimple.add(buttonPanel, c);
 
         // Set up the frame
         setTitle("ChatGPT client");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setContentPane(contentPaneSimple);
+        setPreferredSize(new Dimension(800, 600)); // Set preferred size of the frame (doubled)
         pack();
         setLocationRelativeTo(null); // Center the window
 
-        // Add action listeners
         buttonAsk.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -109,7 +107,6 @@ public class ChatGPTFormSimple extends JFrame {
     }
 
     private void fillAnswer() throws IOException {
-        // Simply reflect the question in the answer field for demonstration
         OpenAIClient aiClient = new OpenAIClient();
         String apiKey = aiClient.readApiKey();
         CloseableHttpClient client = aiClient.initOpenAIClient();
@@ -121,7 +118,6 @@ public class ChatGPTFormSimple extends JFrame {
     }
 
     private void cleanFields() {
-        // Clear the text fields
         textQuestion.setText("");
         textAnswer.setText("");
     }
@@ -132,5 +128,4 @@ public class ChatGPTFormSimple extends JFrame {
             form.setVisible(true);
         });
     }
-
 }
