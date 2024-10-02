@@ -1,22 +1,11 @@
 package forms;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class ChatGPTFormSimple extends JFrame {
     private JPanel contentPaneSimple;
@@ -25,6 +14,7 @@ public class ChatGPTFormSimple extends JFrame {
     private JTextArea textAnswer;
     private JButton buttonAsk;
     private JButton buttonClean;
+    private JCheckBox checkSimpleModel;
 
     public ChatGPTFormSimple() {
         createUIComponents();
@@ -35,6 +25,10 @@ public class ChatGPTFormSimple extends JFrame {
         contentPaneSimple.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(10, 10, 10, 10); // Increased insets for padding
+        if (checkSimpleModel != null) {
+            checkSimpleModel.setSelected(true);
+        }
+        checkSimpleModel.show(true);;
 
         labelQuestion = new JLabel("Ask a question:");
         textQuestion = new JTextField(40); // Doubled width
@@ -54,19 +48,23 @@ public class ChatGPTFormSimple extends JFrame {
         // Add components to contentPane
         c.gridx = 0;
         c.gridy = 0;
+        contentPaneSimple.add(checkSimpleModel, c);
+        c.gridx = 1;
+        c.gridy = 0;
         contentPaneSimple.add(labelQuestion, c);
 
-        c.gridx = 1;
+        c.gridx = 2;
         c.gridy = 0;
         contentPaneSimple.add(textQuestion, c);
 
-        c.gridx = 0;
+        c.gridx = 1;
         c.gridy = 1;
         contentPaneSimple.add(new JLabel("Answer:"), c); // Optional: Add label for answer
 
-        c.gridx = 1;
+        c.gridx = 2;
         c.gridy = 1;
         contentPaneSimple.add(scrollPane, c);
+
 
         // Add buttons on the same line
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -91,7 +89,8 @@ public class ChatGPTFormSimple extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    fillAnswer();
+                    boolean choseSimpleModel = checkSimpleModel.isSelected();
+                    fillAnswer(choseSimpleModel);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -106,13 +105,14 @@ public class ChatGPTFormSimple extends JFrame {
         });
     }
 
-    private void fillAnswer() throws IOException {
+    private void fillAnswer(boolean simpleModelChosen) throws IOException {
         OpenAIClient aiClient = new OpenAIClient();
         String apiKey = aiClient.readApiKey();
         CloseableHttpClient client = aiClient.initOpenAIClient();
 
         String inputText = textQuestion.getText();
-        String myAnswer = aiClient.getOpenAIResponseGpt4Mini(inputText, client, apiKey);
+        String chosenModel = simpleModelChosen ? "gpt-4o-mini" : "gpt-4";
+        String myAnswer = aiClient.getOpenAIResponseGpt(chosenModel, inputText, client, apiKey);
 
         textAnswer.setText(myAnswer);
     }

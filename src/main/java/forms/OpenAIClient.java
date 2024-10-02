@@ -49,7 +49,7 @@ public  class OpenAIClient {
     }
 
 
-    public String getOpenAIResponseGpt4Mini(String inputText, CloseableHttpClient client, String apiKey) throws IOException {
+    public String getOpenAIResponseGpt(String model, String inputText, CloseableHttpClient client, String apiKey) throws IOException {
         String user = "language teacher English, Spanish and German";
 
         ObjectMapper mapper = new ObjectMapper();
@@ -57,7 +57,7 @@ public  class OpenAIClient {
         // Create the root node
         ObjectNode rootNode = mapper.createObjectNode();
         // Add the 'model' field
-        rootNode.put("model", "gpt-4o-mini");
+        rootNode.put("model", model);
         // Create the 'messages' array node
         ArrayNode messagesNode = rootNode.putArray("messages");
         // Create a message object
@@ -152,7 +152,7 @@ public  class OpenAIClient {
             String inputText = "Best things to see in Paris, in categories";
             String inputText2 = "Best things to see in Paris";
             // getOpenAIResponseGpt4(inputText, client, apiKey);
-            String response = getOpenAIResponseGpt4Mini(inputText, client, apiKey);
+            String response = getOpenAIResponseGpt("gpt-4o-mini", inputText, client, apiKey);
             System.out.println("Answer: " + response);
 
         } catch (IOException e) {

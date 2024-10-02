@@ -7,6 +7,7 @@ public class ChatGPTForm extends JFrame{
     private JTextField textQuestion;
     private JButton buttonAskMeAnything;
     private JButton buttonClean;
+    private JCheckBox checkSimpleModel;
 
     private void createUIComponents() {
         contentPane = new JPanel();
